@@ -33,12 +33,14 @@ void run_tests()
     const bool t_io = false;
     
     const bool t_quadrature=true;
+    const bool t_map = true;
 
     if( t_opennl ) test_opennl();
     if( t_lmesh ) Tests::test_load_mesh();
     if( t_io ) Tests::test_load_save_mesh();
     
     if (t_quadrature)  Tests::test_quadrature(4, false);
+    if (t_map) Tests::test_map("square.mesh", false, 4)
 }
 
 void run_simu()

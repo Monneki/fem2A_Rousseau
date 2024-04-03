@@ -68,6 +68,12 @@ namespace FEM2A {
         
         }
         
+        bool test_map( const Mesh& M, bool border, int i)
+        {
+	// lire square.mesh et créer le maillage comme dans les test précédents 
+            return true;
+        }
+        
 
     }
 }
