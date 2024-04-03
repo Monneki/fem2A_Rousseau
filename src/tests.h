@@ -60,7 +60,8 @@ namespace FEM2A {
             std::cout<<"nb_points" << q.nb_points() << "\n";
             for (int pt = 0; pt < q.nb_points(); pt++){
             	w += q.weight(pt);
-            	std::cout<< w << "\n";
+            	std::cout<< "x : " << q.point(pt).x << " et y : " << q.point(pt).y << "\n";
+            	std::cout<< "w : " << w <<"\n";
             	}
             std::cout<<w<<"\n";
             return true;
