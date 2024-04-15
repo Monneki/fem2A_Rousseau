@@ -68,9 +68,12 @@ namespace FEM2A {
         
         }
         
-        bool test_map( const Mesh& M, bool border, int i)
+        bool test_map(std::string M, bool border, int i)
         {
 	// lire square.mesh et créer le maillage comme dans les test précédents 
+            Mesh mesh;
+            mesh.load("data/square.mesh");
+            ElementMapping triangle(mesh, border, i);
             return true;
         }
         

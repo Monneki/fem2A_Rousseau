@@ -90,7 +90,6 @@ namespace FEM2A {
              * \return the determinant of the jacobian matrix
              */
             double jacobian( vertex x_r ) const ;
-
         private:
             bool border_ ;
             std::vector< vertex > vertices_ ;

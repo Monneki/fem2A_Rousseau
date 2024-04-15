@@ -40,7 +40,7 @@ void run_tests()
     if( t_io ) Tests::test_load_save_mesh();
     
     if (t_quadrature)  Tests::test_quadrature(4, false);
-    if (t_map) Tests::test_map("square.mesh", false, 4)
+    if (t_map) Tests::test_map("data/square.mesh", false, 4);
 }
 
 void run_simu()
