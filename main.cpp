@@ -57,7 +57,7 @@ void run_tests()
     //if (t_SF) Tests::test_ShapeFunction(3,1);
     if (t_nb_functions) Tests::test_nb_functions();
     if (t_evaluate) Tests::test_evaluate(2);
-    if (t_G_evaluate) Tests::test_G_evaluate(2);
+    if (t_G_evaluate) Tests::test_G_evaluate(0);
 }
 
 void run_simu()

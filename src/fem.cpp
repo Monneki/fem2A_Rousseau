@@ -292,7 +292,7 @@ namespace FEM2A {
     /****************************************************************/
     /* Implementation of Finite Element functions */
     /****************************************************************/
-    void assemble_elementary_matrix(
+    void (
         const ElementMapping& elt_mapping,
         const ShapeFunctions& reference_functions,
         const Quadrature& quadrature,
