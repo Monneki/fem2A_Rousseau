@@ -122,4 +122,13 @@ namespace FEM2A {
              std::cout << "le déterminant de la matrice est : " << det << ". \n";
              return true;
         }
+        
+        bool test_ShapeFunction (int dim, int order)
+        {
+             ShapeFunctions SF(dim, order);
+             return true;
+        }
+        
+        
+        
 }}

@@ -217,7 +217,6 @@ namespace FEM2A {
         if (not border_)
         {
         	det = J.det_2x2();
-        	std::cout << "det " << det;
         }
 
         return det;
@@ -229,14 +228,23 @@ namespace FEM2A {
     ShapeFunctions::ShapeFunctions( int dim, int order )
         : dim_( dim ), order_( order )
     {
+        assert(dim == 1 || dim == 2);
+        assert(order == 1);
         std::cout << "[ShapeFunctions] constructor in dimension " << dim << '\n';
-        // TODO
+        std::cout << "[ShapeFunctions] for the order "<< order << '\n';
     }
 
     int ShapeFunctions::nb_functions() const
-    {
+    {/*
         std::cout << "[ShapeFunctions] number of functions" << '\n';
-        // TODO
+        if  (border_)
+       	{
+        	return 2;
+       	}
+        if (not border_)
+        {
+        	return 3;
+        }*/
         return 0 ;
     }
 
