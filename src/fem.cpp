@@ -155,18 +155,29 @@ namespace FEM2A {
         	{
         		vertices_.push_back(M.get_triangle_vertex(i,indiceGlob));
         	}
-        	for (int v = 0; v<3; ++v)
+        	/*for (int v = 0; v<3; ++v)
         	{
         		std::cout<< vertices_[v].x << "\n"<< vertices_[v].y << "\n";
-        	}
+        	}*/
     	}
     }
 
     vertex ElementMapping::transform( vertex x_r ) const
     {
         std::cout << "[ElementMapping] transform reference to world space" << '\n';
-        // TODO
         vertex r ;
+        
+        if (border_)
+        {
+        	r.x = (1-x_r.x)*vertices_[0].x + x_r.x * vertices_[1].x;
+        	r.y = (1-x_r.x)*vertices_[0].y + x_r.x * vertices_[1].y;
+        }
+        if (not border_)
+        {
+        	r.x = (1 - x_r.x - x_r.y)*vertices_[0].x + x_r.x * vertices_[1].x + x_r.y * vertices_[2].x;
+        	r.y = (1 - x_r.x - x_r.y)*vertices_[0].y + x_r.x * vertices_[1].y + x_r.y * vertices_[2].y;
+        }
+        	
         return r ;
     }
 
