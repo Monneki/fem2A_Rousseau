@@ -39,7 +39,8 @@ void run_tests()
     const bool t_DetJacobienne = false;
     
     const bool t_SF = false;
-    const bool t_nb_functions = true;
+    const bool t_nb_functions = false;
+    const bool t_evaluate = true;
 
     if( t_opennl ) test_opennl();
     if( t_lmesh ) Tests::test_load_mesh();
@@ -54,6 +55,7 @@ void run_tests()
     if (t_SF) Tests::test_ShapeFunction(1,1);
     //if (t_SF) Tests::test_ShapeFunction(3,1);
     if (t_nb_functions) Tests::test_nb_functions();
+    if (t_evaluate) Tests::test_evaluate(2);
 }
 
 void run_simu()

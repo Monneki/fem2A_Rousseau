@@ -251,7 +251,17 @@ namespace FEM2A {
     double ShapeFunctions::evaluate( int i, vertex x_r ) const
     {
         std::cout << "[ShapeFunctions] evaluate shape function " << i << '\n';
-        // TODO
+	if (dim_ == 1)
+	{
+		double L[2] = {1 - x_r.x, x_r.x};
+		return L[i];
+	}
+	
+	if (dim_ == 2)
+	{
+		double L[3] =  {1 - x_r.x - x_r.y, x_r.x, x_r.y};
+		return L[i];
+	}
         return 0. ; // should not be reached
     }
 

@@ -132,12 +132,25 @@ namespace FEM2A {
         bool test_nb_functions()
         {
              ShapeFunctions SF1(2,1);
-             std::cout << "il s'agit d'un triangle " << SF1.nb_functions()  << "___ \n";
+             std::cout << "il s'agit d'un triangle " << SF1.nb_functions()  << "\n";
              ShapeFunctions SF2(1,1);
              std::cout << "il s'agit d'un segment " << SF2.nb_functions() << "\n";
              return true;
         }
         
+        bool test_evaluate (int i)
+        {
+       	     ShapeFunctions SF(2,1);
+       	     vertex point; 
+       	     point.x = 0.2;
+             point.y = 0.4;
+             
+             std::cout << "le valeur de phi en le point : " << i << " vaut : " << SF.evaluate(i, point) << "\n";
+             
+             return 0;
+        }
+        	
+        	
         
         
 }}
