@@ -35,6 +35,7 @@ void run_tests()
     const bool t_quadrature=false;
     const bool t_map = false;
     const bool t_transform = true;
+    const bool t_Mjacobienne = true;
 
     if( t_opennl ) test_opennl();
     if( t_lmesh ) Tests::test_load_mesh();
@@ -43,6 +44,7 @@ void run_tests()
     if (t_quadrature)  Tests::test_quadrature(4, false);
     if (t_map) Tests::test_map("data/square.mesh", false, 4);
     if (t_transform) Tests::test_transform();
+    if (t_Mjacobienne) Tests::test_Jacobian_Matrix();
 }
 
 void run_simu()

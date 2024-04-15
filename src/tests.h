@@ -82,13 +82,28 @@ namespace FEM2A {
              Mesh mesh;
              mesh.load("data/square.mesh");
              ElementMapping triangle(mesh, false, 4);
+             
              vertex point;
              point.x = 0.2;
              point.y = 0.4;
+             
 	     vertex R = triangle.transform(point);
 	     std::cout << "après transormation, x = " << R.x << " et y = "<< R.y << "\n";
              return true;
         }
-
-    }
-}
+        
+        bool test_Jacobian_Matrix()
+        {
+             Mesh mesh;
+             mesh.load("data/square.mesh");
+             ElementMapping triangle(mesh, false, 4);
+             
+             vertex point;
+             point.x = 0.2;
+             point.y = 0.4;
+             
+             DenseMatrix Jout = triangle.jacobian_matrix(point);
+             Jout.print();
+             return true;
+    	}
+}}
