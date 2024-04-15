@@ -235,17 +235,17 @@ namespace FEM2A {
     }
 
     int ShapeFunctions::nb_functions() const
-    {/*
+    {
         std::cout << "[ShapeFunctions] number of functions" << '\n';
-        if  (border_)
+        if  (dim_ == 1)
        	{
         	return 2;
        	}
-        if (not border_)
+        if (dim_ == 2)
         {
         	return 3;
-        }*/
-        return 0 ;
+        }
+        return 0;
     }
 
     double ShapeFunctions::evaluate( int i, vertex x_r ) const

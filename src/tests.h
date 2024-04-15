@@ -129,6 +129,15 @@ namespace FEM2A {
              return true;
         }
         
+        bool test_nb_functions()
+        {
+             ShapeFunctions SF1(2,1);
+             std::cout << "il s'agit d'un triangle " << SF1.nb_functions()  << "___ \n";
+             ShapeFunctions SF2(1,1);
+             std::cout << "il s'agit d'un segment " << SF2.nb_functions() << "\n";
+             return true;
+        }
+        
         
         
 }}
