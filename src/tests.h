@@ -145,11 +145,21 @@ namespace FEM2A {
        	     point.x = 0.2;
              point.y = 0.4;
              
-             std::cout << "le valeur de phi en le point : " << i << " vaut : " << SF.evaluate(i, point) << "\n";
+             std::cout << "la valeur de phi au point : " << i << " vaut : " << SF.evaluate(i, point) << "\n";
              
-             return 0;
+             return true;
         }
+        
+        bool test_G_evaluate(int i)
+        {
+             ShapeFunctions SF(2,1);
+             vertex point;
+             point.x = 0.2;
+             point.y = 0.4;
         	
+             std::cout << "le gradient de phi au point " << i << " est x = " << SF.evaluate_grad(i, point).x << " y = " << SF.evaluate_grad(i, point).y << " \n";
+             return true;
+        }
         	
         
         

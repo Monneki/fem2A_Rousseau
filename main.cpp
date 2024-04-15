@@ -41,6 +41,7 @@ void run_tests()
     const bool t_SF = false;
     const bool t_nb_functions = false;
     const bool t_evaluate = true;
+    const bool t_G_evaluate = true;
 
     if( t_opennl ) test_opennl();
     if( t_lmesh ) Tests::test_load_mesh();
@@ -56,6 +57,7 @@ void run_tests()
     //if (t_SF) Tests::test_ShapeFunction(3,1);
     if (t_nb_functions) Tests::test_nb_functions();
     if (t_evaluate) Tests::test_evaluate(2);
+    if (t_G_evaluate) Tests::test_G_evaluate(2);
 }
 
 void run_simu()
