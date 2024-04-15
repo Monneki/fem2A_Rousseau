@@ -36,6 +36,7 @@ void run_tests()
     const bool t_map = false;
     const bool t_transform = true;
     const bool t_Mjacobienne = true;
+    const bool t_DetJacobienne = true;
 
     if( t_opennl ) test_opennl();
     if( t_lmesh ) Tests::test_load_mesh();
@@ -45,6 +46,7 @@ void run_tests()
     if (t_map) Tests::test_map("data/square.mesh", false, 4);
     if (t_transform) Tests::test_transform();
     if (t_Mjacobienne) Tests::test_Jacobian_Matrix();
+    if (t_DetJacobienne) Tests::test_Jacobian_Det();
 }
 
 void run_simu()

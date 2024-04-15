@@ -206,8 +206,21 @@ namespace FEM2A {
     double ElementMapping::jacobian( vertex x_r ) const
     {
         std::cout << "[ElementMapping] compute jacobian determinant" << '\n';
-        // TODO
-        return 0. ;
+	DenseMatrix J;
+	J = jacobian_matrix(x_r);
+	double det = 0;
+	if (border_)
+	{
+		det = sqrt(J.transpose().get(0,0) * J.get(0,0) + J.transpose().get(0,1) * J.get(1,0));
+		
+	}
+        if (not border_)
+        {
+        	det = J.det_2x2();
+        	std::cout << "det " << det;
+        }
+
+        return det;
     }
 
     /****************************************************************/
