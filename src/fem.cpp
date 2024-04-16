@@ -297,11 +297,42 @@ namespace FEM2A {
         const ShapeFunctions& reference_functions,
         const Quadrature& quadrature,
         double (*coefficient)(vertex),
-        DenseMatrix& Ke )
+        DenseMatrix& Ke )//taille Ke = nombre de point d'interpolation 
     {
-        std::cout << "compute elementary matrix" << '\n';
-        // TODO
+    	
+    	for (int i = 0; i < quadrature.nb_points(); i++)
+    	{
+    		for (int j = 0; j < quadrature.nb_points(); j++)
+    		{	
+    			double Somme = 0;
+    			for (int pt = 0; pt < quadrature.nb_points(); pt++)
+    			{
+    				double eltq = 0;
+    				double w = quadrature.weight(pt);
+    				double k = (*coefficient)(elt_mapping.transform(quadrature.point(pt)));
+    				DenseMatrix Je;
+    				
+    				Je = elt_mapping.jacobian_matrix(quadrature.point(pt));
+    				DenseMatrix inv_Je = Je.invert_2x2();
+    				DenseMatrix fin_Je = inv_Je.transpose();
+    				vertex gradI = reference_functions.evaluate_grad(i, quadrature.point(pt));
+    				vertex gradJ = reference_functions.evaluate_grad(j, quadrature.point(pt));
+    				double detJe = elt_mapping.jacobian(quadrature.point(pt));
+    				
+    				vertex JexI = fin_Je.mult_2x2_2(gradI);
+    				vertex JexJ = fin_Je.mult_2x2_2(gradJ);
+    				
+    				double dotJe = dot(JexI, JexJ);
+    				
+    				eltq = w * k * dotJe * detJe;
+    				
+    				Somme += eltq;
+    			}
+    			Ke.set(i,j, Somme);
+    		}
+    	}
     }
+
 
     void local_to_global_matrix(
         const Mesh& M,

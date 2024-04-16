@@ -160,6 +160,33 @@ namespace FEM2A {
              std::cout << "le gradient de phi au point " << i << " est x = " << SF.evaluate_grad(i, point).x << " y = " << SF.evaluate_grad(i, point).y << " \n";
              return true;
         }
+        
+        double unit_fct( vertex v )
+        {
+            return 1.;
+        }
+        
+        bool test_AEM()
+        {
+        	Mesh mesh;
+             	mesh.load("data/square.mesh");
+            	ElementMapping elt_mapping(mesh, false, 4);
+        	
+        	ShapeFunctions reference_functions (2,1);
+        	
+        	Quadrature quadrature;
+        	quadrature  = quadrature.get_quadrature(2, false);
+        	vertex pt_quad = quadrature.point(2);
+        	
+        	DenseMatrix Ke;
+		Ke.set_size(3,3);
+	
+        	
+        	assemble_elementary_matrix(elt_mapping, reference_functions, quadrature, unit_fct, Ke);
+        	Ke.print();
+		return true;
+	}
+        	
         	
         
         
