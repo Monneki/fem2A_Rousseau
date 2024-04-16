@@ -253,7 +253,7 @@ namespace FEM2A {
     void apply_dirichlet_boundary_conditions(
         const Mesh& M,
         const std::vector< bool >& attribute_is_dirichlet, /* size: nb of attributes */
-        const std::vector< double >& values, /* size: nb of DOFs */
+        const std::vector< double >& values, /* size: nb of DOFs = M.nb_vertices() */
         SparseMatrix& K,
         std::vector< double >& F ) ;
 

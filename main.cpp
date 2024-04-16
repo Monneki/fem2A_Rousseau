@@ -42,13 +42,14 @@ void run_tests()
     const bool t_nb_functions = false;
     const bool t_evaluate = false;
     const bool t_G_evaluate = false;
-    const bool t_AEM = true;
+    const bool t_AEM = false;
+    const bool t_LtGMatrix = true;
 
     if( t_opennl ) test_opennl();
     if( t_lmesh ) Tests::test_load_mesh();
     if( t_io ) Tests::test_load_save_mesh();
     
-    if (t_quadrature)  Tests::test_quadrature(4, false);
+    if (t_quadrature)  Tests::test_quadrature(0, false);
     if (t_map) Tests::test_map("data/square.mesh", false, 4);
     if (t_transform) Tests::test_transform();
     if (t_Mjacobienne) Tests::test_Jacobian_Matrix();
@@ -61,6 +62,7 @@ void run_tests()
     if (t_G_evaluate) Tests::test_G_evaluate(0);
     
     if (t_AEM) Tests::test_AEM();
+    if (t_LtGMatrix) Tests::test_LtGMatrix();
 }
 
 void run_simu()

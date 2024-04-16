@@ -133,11 +133,11 @@ namespace FEM2A {
         : border_( border )
     {
         //vertice_ = vecteur de vertex
-        std::cout << "[ElementMapping] constructor for element " << i << " " << "\n";
+        //std::cout << "[ElementMapping] constructor for element " << i << " " << "\n";
         std::vector<vertex> vertices;
         if ( border ) 
         {
-        	std::cout << "edge"; 
+        	//std::cout << "edge"; 
         	for (int indiceGlob = 0; indiceGlob < 2; indiceGlob++)
         	{
         		vertices_.push_back(M.get_edge_vertex(i, indiceGlob));
@@ -150,7 +150,7 @@ namespace FEM2A {
         
         if (not border)
         {
-        	std::cout << "triangle";
+        	//std::cout << "triangle";
         	for (int indiceGlob = 0; indiceGlob < 3; indiceGlob++)
         	{
         		vertices_.push_back(M.get_triangle_vertex(i,indiceGlob));
@@ -164,7 +164,7 @@ namespace FEM2A {
 
     vertex ElementMapping::transform( vertex x_r ) const
     {
-        std::cout << "[ElementMapping] transform reference to world space" << '\n';
+        //std::cout << "[ElementMapping] transform reference to world space" << '\n';
         vertex r ;
         
         if (border_)
@@ -183,7 +183,7 @@ namespace FEM2A {
 
     DenseMatrix ElementMapping::jacobian_matrix( vertex x_r ) const
     {
-        std::cout << "[ElementMapping] compute jacobian matrix" << '\n';
+        //std::cout << "[ElementMapping] compute jacobian matrix" << '\n';
         DenseMatrix J ;
         if (border_)
         {
@@ -205,7 +205,7 @@ namespace FEM2A {
 
     double ElementMapping::jacobian( vertex x_r ) const
     {
-        std::cout << "[ElementMapping] compute jacobian determinant" << '\n';
+        //std::cout << "[ElementMapping] compute jacobian determinant" << '\n';
 	DenseMatrix J;
 	J = jacobian_matrix(x_r);
 	double det = 0;
@@ -230,13 +230,13 @@ namespace FEM2A {
     {
         assert(dim == 1 || dim == 2);
         assert(order == 1);
-        std::cout << "[ShapeFunctions] constructor in dimension " << dim << '\n';
-        std::cout << "[ShapeFunctions] for the order "<< order << '\n';
+        //std::cout << "[ShapeFunctions] constructor in dimension " << dim << '\n';
+        //std::cout << "[ShapeFunctions] for the order "<< order << '\n';
     }
 
     int ShapeFunctions::nb_functions() const
     {
-        std::cout << "[ShapeFunctions] number of functions" << '\n';
+        //std::cout << "[ShapeFunctions] number of functions" << '\n';
         if  (dim_ == 1)
        	{
         	return 2;
@@ -250,7 +250,7 @@ namespace FEM2A {
 
     double ShapeFunctions::evaluate( int i, vertex x_r ) const
     {
-        std::cout << "[ShapeFunctions] evaluate shape function " << i << '\n';
+        //std::cout << "[ShapeFunctions] evaluate shape function " << i << '\n';
 	if (dim_ == 1)
 	{
 		double L[2] = {1 - x_r.x, x_r.x};
@@ -267,7 +267,7 @@ namespace FEM2A {
 
     vec2 ShapeFunctions::evaluate_grad( int i, vertex x_r ) const
     {
-        std::cout << "[ShapeFunctions] evaluate gradient shape function " << i << '\n';
+        //std::cout << "[ShapeFunctions] evaluate gradient shape function " << i << '\n';
         vec2 g ;
         
         if (dim_ == 1)
@@ -300,16 +300,16 @@ namespace FEM2A {
         DenseMatrix& Ke )//taille Ke = nombre de point d'interpolation 
     {
     	
-    	for (int i = 0; i < quadrature.nb_points(); i++)
+    	for (int i = 0; i < reference_functions.nb_functions(); i++)
     	{
-    		for (int j = 0; j < quadrature.nb_points(); j++)
+    		for (int j = 0; j < reference_functions.nb_functions(); j++)
     		{	
     			double Somme = 0;
     			for (int pt = 0; pt < quadrature.nb_points(); pt++)
     			{
     				double eltq = 0;
     				double w = quadrature.weight(pt);
-    				double k = (*coefficient)(elt_mapping.transform(quadrature.point(pt)));
+    				double k = coefficient(elt_mapping.transform(quadrature.point(pt)));
     				DenseMatrix Je;
     				
     				Je = elt_mapping.jacobian_matrix(quadrature.point(pt));
@@ -340,8 +340,17 @@ namespace FEM2A {
         const DenseMatrix& Ke,
         SparseMatrix& K )
     {
-        std::cout << "Ke -> K" << '\n';
-        // TODO
+        //std::cout << "Ke -> K" << '\n';
+        for (int indiceX = 0; indiceX < 3; indiceX++)
+        {
+        	for (int indiceY = 0; indiceY < 3; indiceY++)
+        	{	
+        		
+        		double indiceGx = M.get_triangle_vertex_index(t, indiceX);
+        		double indiceGy = M.get_triangle_vertex_index(t, indiceY);
+        		K.add(indiceGx, indiceGy, Ke.get(indiceX, indiceY));
+        	}
+        }
     }
 
     void assemble_elementary_vector(
@@ -384,8 +393,25 @@ namespace FEM2A {
         SparseMatrix& K,
         std::vector< double >& F )
     {
-        std::cout << "apply dirichlet boundary conditions" << '\n';
-        // TODO
+        //std::cout << "apply dirichlet boundary conditions" << '\n';
+        std::vector <bool> vertices_etu (value.size(), false); /*Creation du vecteur vertices_etu de taille value.size et contenant uniquement des false*/
+        double coef_penalite =  10000;
+        for (int edge = 0; edge < M.nb_edges(); edge++)
+        {
+        	int edge_attribute = M.get_edge_attribute(edge);
+        	if (attribute_is_dirichlet[edge_attribut])
+        	{
+        		for (int vertex = 0; vertex <2 ; vertex ++)
+        		{
+        			int i_vertex = M.get_edge_vertex_index(edge, vertex);
+        			if (not vertices_etu[i_vertex])
+        			{
+        				vertices_etu[i_vertex] = true;
+        				K.add(i_vertex, i_vertex, coef_penalite);
+        				F[i_vertex] += coef_penalite*values[vertex_index];
+        			}
+        		}
+        	}
     }
 
     void solve_poisson_problem(

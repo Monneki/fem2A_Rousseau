@@ -175,18 +175,64 @@ namespace FEM2A {
         	ShapeFunctions reference_functions (2,1);
         	
         	Quadrature quadrature;
-        	quadrature  = quadrature.get_quadrature(2, false);
-        	vertex pt_quad = quadrature.point(2);
-        	
+        	quadrature  = quadrature.get_quadrature(0, false);
+        	vertex pt_quad = quadrature.point(0);
+
         	DenseMatrix Ke;
-		Ke.set_size(3,3);
+		Ke.set_size(reference_functions.nb_functions(),reference_functions.nb_functions());
 	
         	
         	assemble_elementary_matrix(elt_mapping, reference_functions, quadrature, unit_fct, Ke);
         	Ke.print();
 		return true;
 	}
+        
+        bool test_LtGMatrix()
+        {// Necessaire pour obtenir Ke
+        	Mesh mesh; // maillage
+        	mesh.load("data/square.mesh");
+        	ElementMapping elt_mapping(mesh, false, 4);
+        	ShapeFunctions reference_functions (2,1);
+        	Quadrature quadrature;
+        	quadrature  = quadrature.get_quadrature(0, false);
+        	vertex pt_quad = quadrature.point(0);
+        	DenseMatrix Ke;
+		Ke.set_size(reference_functions.nb_functions(),reference_functions.nb_functions());
+		assemble_elementary_matrix(elt_mapping, reference_functions, quadrature, unit_fct, Ke);
+        	Ke.print();
         	
+	//Construction de la matrice K
+		
+		int tailleK = quadrature.nb_points() * mesh.nb_vertices();
+		SparseMatrix K(tailleK);
+		int t = 4; // index du triangle
+		local_to_global_matrix(mesh, t, Ke, K);
+		K.print();
+		return true;
+	}
+		
+	bool test_aDBc()
+	{//Préparation pour appliquer les conditions de D
+		Mesh mesh; // maillage
+        	mesh.load("data/square.mesh");
+        	ElementMapping elt_mapping(mesh, false, 4);
+        	ShapeFunctions reference_functions (2,1);
+        	Quadrature quadrature;
+        	quadrature  = quadrature.get_quadrature(0, false);
+        	vertex pt_quad = quadrature.point(0);
+        	DenseMatrix Ke;
+		Ke.set_size(reference_functions.nb_functions(),reference_functions.nb_functions());
+		assemble_elementary_matrix(elt_mapping, reference_functions, quadrature, unit_fct, Ke);
+        	Ke.print();
+		int tailleK = quadrature.nb_points() * mesh.nb_vertices();
+		SparseMatrix K(tailleK);
+		int t = 4; // index du triangle
+		local_to_global_matrix(mesh, t, Ke, K);
+		K.print();
+		
+		
+		return true;
+		
         	
         
         
