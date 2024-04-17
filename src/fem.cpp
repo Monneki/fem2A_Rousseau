@@ -389,29 +389,38 @@ namespace FEM2A {
     void apply_dirichlet_boundary_conditions(
         const Mesh& M,
         const std::vector< bool >& attribute_is_dirichlet, /* size: nb of attributes */
-        const std::vector< double >& values, /* size: nb of DOFs */
+        const std::vector< double >& values, /* size: nb of DOFs = Degree of Freedom */
         SparseMatrix& K,
         std::vector< double >& F )
     {
         //std::cout << "apply dirichlet boundary conditions" << '\n';
-        std::vector <bool> vertices_etu (value.size(), false); /*Creation du vecteur vertices_etu de taille value.size et contenant uniquement des false*/
-        double coef_penalite =  10000;
-        for (int edge = 0; edge < M.nb_edges(); edge++)
+        std::vector <bool> vertices_etu (values.size(), false); /*Creation du vecteur vertices_etu de taille value.size et contenant uniquement des false*/
+        double coef_penalite =  10000; // coef de penalite 1000*> à la plus grande valeur de K
+        for (int edge = 0; edge < M.nb_edges(); edge++) 
+        // Parcourt de tout les cote present dans le mesh
         {
         	int edge_attribute = M.get_edge_attribute(edge);
-        	if (attribute_is_dirichlet[edge_attribut])
+        	//Recuperation de l'attribut du cote etudie
+        	if (attribute_is_dirichlet[edge_attribute])
+        	//Verification, est-ce que le côte en question est soumis a la condition de Dirichlet
         	{
         		for (int vertex = 0; vertex <2 ; vertex ++)
         		{
         			int i_vertex = M.get_edge_vertex_index(edge, vertex);
+        			//recuperation de l'index du cote etudie
         			if (not vertices_etu[i_vertex])
+        			//verification, est ce que le cote etudie a deja ete traite, si non ... 
         			{
         				vertices_etu[i_vertex] = true;
+        				//on l'indique comme etant traite 
         				K.add(i_vertex, i_vertex, coef_penalite);
-        				F[i_vertex] += coef_penalite*values[vertex_index];
+        				//on l'ajoute à K avec le coef de penalite 
+        				F[i_vertex] += coef_penalite*values[i_vertex];
+        				//Creation de F
         			}
         		}
         	}
+    }
     }
 
     void solve_poisson_problem(

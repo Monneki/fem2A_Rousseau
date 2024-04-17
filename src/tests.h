@@ -203,7 +203,7 @@ namespace FEM2A {
         	
 	//Construction de la matrice K
 		
-		int tailleK = quadrature.nb_points() * mesh.nb_vertices();
+		int tailleK = mesh.nb_vertices();
 		SparseMatrix K(tailleK);
 		int t = 4; // index du triangle
 		local_to_global_matrix(mesh, t, Ke, K);
@@ -223,17 +223,38 @@ namespace FEM2A {
         	DenseMatrix Ke;
 		Ke.set_size(reference_functions.nb_functions(),reference_functions.nb_functions());
 		assemble_elementary_matrix(elt_mapping, reference_functions, quadrature, unit_fct, Ke);
-        	Ke.print();
-		int tailleK = quadrature.nb_points() * mesh.nb_vertices();
+		int tailleK = mesh.nb_vertices();
 		SparseMatrix K(tailleK);
 		int t = 4; // index du triangle
 		local_to_global_matrix(mesh, t, Ke, K);
-		K.print();
+
+		//initialisation attribute_is_dirichlet
+		std::vector<bool> attribute_is_dirichlet;
+		attribute_is_dirichlet.push_back(true);
+		
+		//Attribution d'un attribut à tout les edges
+		mesh.set_attribute(unit_fct, 0, true);
+		
+		//initialisation values
+		std::vector<double> values;
+		//values[mesh.nb_vertices()];
+		for (int i = 0; i < mesh.nb_vertices(); i++)
+		{
+			//values[i] = mesh.get_vertex(i).x + mesh.get_vertex(i).y;
+			values.push_back(mesh.get_vertex(i).x + mesh.get_vertex(i).y);
+			//std::cout<<values[i]<< "\n";
+		}
 		
 		
+		//initialiation F
+		std::vector<double> F(mesh.nb_vertices(), 0);
+		
+		apply_dirichlet_boundary_conditions(mesh, attribute_is_dirichlet, values, K, F);
+		for (int k = 0; k<mesh.nb_vertices(); k++)
+		{
+			std::cout<<F[k] << "\n";
+		}
 		return true;
-		
+	}
         	
-        
-        
 }}
