@@ -186,7 +186,7 @@ namespace FEM2A {
         	Ke.print();
 		return true;
 	}
-        
+	        
         bool test_LtGMatrix()
         {// Necessaire pour obtenir Ke
         	Mesh mesh; // maillage
@@ -256,5 +256,29 @@ namespace FEM2A {
 		}
 		return true;
 	}
+	
+		bool test_AEV()
+	{
+		Mesh mesh;
+		mesh.load("data/square.mesh");
+		ElementMapping elt_mapping(mesh, true, 4);
+		
+		ShapeFunctions reference_functions(1,1);
+		
+		Quadrature quadrature; 
+		quadrature = quadrature.get_quadrature(0, true);
+		vertex pt_quad = quadrature.point(0);
+		
+		std::vector<double> Fe(reference_functions.nb_functions(), 0);
+		
+		assemble_elementary_vector(elt_mapping, reference_functions, quadrature, unit_fct, Fe);
+		
+		for (int i = 0; i<reference_functions.nb_functions(); i++)
+		{
+			std::cout << " i = " << i << " ; Fe[i] = " << Fe[i] << "\n";
+		}
+		return true;
+	}
+		
         	
 }}

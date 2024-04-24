@@ -46,6 +46,8 @@ void run_tests()
     const bool t_AEM = false;
     const bool t_LtGMatrix = false;
     const bool t_aDBc = false;
+    
+    const bool t_AEV = true;
 
 
     if( t_opennl ) test_opennl();
@@ -67,6 +69,8 @@ void run_tests()
     if (t_AEM) Tests::test_AEM();
     if (t_LtGMatrix) Tests::test_LtGMatrix();
     if (t_aDBc) Tests::test_aDBc();
+    
+    if (t_AEV) Tests::test_AEV();
 
 }
 

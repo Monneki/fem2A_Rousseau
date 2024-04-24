@@ -13,9 +13,9 @@ namespace FEM2A {
     void print( const std::vector<double>& x )
     {
         for ( int i = 0; i < x.size(); ++i ) {
-            std::cout << x[i] << " ";
+            //std::cout << x[i] << " ";
         }
-        std::cout << std::endl;
+        //std::cout << std::endl;
     }
 
     /****************************************************************/
@@ -108,7 +108,7 @@ namespace FEM2A {
             pts = const_cast<double*>(segment_P2);
             nb_pts = 2;
         } else {
-            std::cout << "Quadrature not implemented for order " << order << std::endl;
+            //std::cout << "Quadrature not implemented for order " << order << std::endl;
             assert( false );
         }
         Q.wxy_.resize(nb_pts * 3);
@@ -144,7 +144,7 @@ namespace FEM2A {
         	}
         	for (int v = 0; v<2; ++v)
         	{
-        		std::cout<< vertices_[v].x << "\n "<< vertices_[v].y << "\n";
+        		//std::cout<< vertices_[v].x << "\n "<< vertices_[v].y << "\n";
         	}
         }
         
@@ -360,8 +360,32 @@ namespace FEM2A {
         double (*source)(vertex),
         std::vector< double >& Fe )
     {
-        std::cout << "compute elementary vector (source term)" << '\n';
-        // TODO
+        //std::cout << "compute elementary vector (source term)" << '\n';
+{
+    	
+    	for (int i = 0; i < reference_functions.nb_functions(); i++)
+    	{
+    		double Somme = 0;
+    		for (int pt = 0; pt < quadrature.nb_points(); pt++)	
+    		{
+    			
+    			double eltq = 0;
+    			double w = quadrature.weight(pt);
+    			double f = source(elt_mapping.transform(quadrature.point(pt)));
+    			double detJe ;
+    				
+    			detJe = elt_mapping.jacobian(quadrature.point(pt));
+    			double SFi = reference_functions.evaluate(i, quadrature.point(pt));
+
+    				
+    			eltq = w * f * SFi * detJe;
+    				
+    			Somme += eltq;
+    		}	
+    		Fe[i] = Somme;
+    		
+    	}
+    }
     }
 
     void assemble_elementary_neumann_vector(
