@@ -43,6 +43,7 @@ namespace FEM2A {
             return true;
         }
 
+
         bool test_load_save_mesh()
         {
             Mesh mesh;
@@ -50,6 +51,7 @@ namespace FEM2A {
             mesh.save("data/geothermie_4.mesh");
             return true;
         }
+        
         
         bool test_quadrature(int order, bool border)
         {
@@ -68,6 +70,7 @@ namespace FEM2A {
         
         }
         
+        
         bool test_map(std::string M, bool border, int i)
         {
 	// lire square.mesh et créer le maillage comme dans les test précédents 
@@ -76,6 +79,7 @@ namespace FEM2A {
             ElementMapping triangle(mesh, border, i);
             return true;
         }
+        
         
         bool test_transform()
         {
@@ -92,6 +96,7 @@ namespace FEM2A {
              return true;
         }
         
+        
         bool test_Jacobian_Matrix()
         {
              Mesh mesh;
@@ -106,6 +111,7 @@ namespace FEM2A {
              Jout.print();
              return true;
     	}
+    	
     	
     	bool test_Jacobian_Det()
     	{
@@ -123,11 +129,13 @@ namespace FEM2A {
              return true;
         }
         
+        
         bool test_ShapeFunction (int dim, int order)
         {
              ShapeFunctions SF(dim, order);
              return true;
         }
+        
         
         bool test_nb_functions()
         {
@@ -137,6 +145,7 @@ namespace FEM2A {
              std::cout << "il s'agit d'un segment " << SF2.nb_functions() << "\n";
              return true;
         }
+        
         
         bool test_evaluate (int i)
         {
@@ -150,6 +159,7 @@ namespace FEM2A {
              return true;
         }
         
+        
         bool test_G_evaluate(int i)
         {
              ShapeFunctions SF(2,1);
@@ -161,10 +171,12 @@ namespace FEM2A {
              return true;
         }
         
+        
         double unit_fct( vertex v )
         {
             return 1.;
         }
+        
         
         bool test_AEM()
         {
@@ -186,6 +198,7 @@ namespace FEM2A {
         	Ke.print();
 		return true;
 	}
+	   
 	        
         bool test_LtGMatrix()
         {// Necessaire pour obtenir Ke
@@ -210,6 +223,7 @@ namespace FEM2A {
 		K.print();
 		return true;
 	}
+	
 		
 	bool test_aDBc()
 	{//Préparation pour appliquer les conditions de D
@@ -257,6 +271,7 @@ namespace FEM2A {
 		return true;
 	}
 	
+	
 		bool test_AEV()
 	{
 		Mesh mesh;
@@ -273,12 +288,40 @@ namespace FEM2A {
 		
 		assemble_elementary_vector(elt_mapping, reference_functions, quadrature, unit_fct, Fe);
 		
-		for (int i = 0; i<reference_functions.nb_functions(); i++)
+		/*for (int i = 0; i<reference_functions.nb_functions(); i++)
 		{
 			std::cout << " i = " << i << " ; Fe[i] = " << Fe[i] << "\n";
-		}
+		}*/
 		return true;
 	}
+	
+	
+		bool test_LtGV(int border, int dim)
+	{
+		Mesh mesh; // maillage
+        	mesh.load("data/square.mesh");
+        	ElementMapping elt_mapping(mesh, border, 4);
+        	ShapeFunctions reference_functions (dim,1);
+        	Quadrature quadrature;
+        	quadrature  = quadrature.get_quadrature(0, border);
+        	vertex pt_quad = quadrature.point(0);
+		
+		std::vector<double> Fe(reference_functions.nb_functions(), 0);
+		
+		assemble_elementary_vector(elt_mapping, reference_functions, quadrature, unit_fct, Fe);
+        	
+	//Construction de la matrice K
+		int tailleF = mesh.nb_vertices();
+		std::vector< double > F(tailleF,0);
+		int i = 4; // index de l'élement
+		local_to_global_vector(mesh, border, i, Fe, F);
+		
+		for (int i = 0; i<mesh.nb_vertices(); i++)
+		{
+			std::cout <<"F[i] = " << F[i] << "\n";
+		}
+		return true;
+		}
 		
         	
 }}

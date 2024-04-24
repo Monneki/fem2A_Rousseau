@@ -47,7 +47,8 @@ void run_tests()
     const bool t_LtGMatrix = false;
     const bool t_aDBc = false;
     
-    const bool t_AEV = true;
+    const bool t_AEV = false;
+    const bool t_LtGV = true;
 
 
     if( t_opennl ) test_opennl();
@@ -71,6 +72,8 @@ void run_tests()
     if (t_aDBc) Tests::test_aDBc();
     
     if (t_AEV) Tests::test_AEV();
+    if (t_LtGV) Tests::test_LtGV(true, 1); // pour triangle - false, 2
+    					    // pour edge - true,1
 
 }
 
@@ -78,12 +81,25 @@ void run_simu()
 {
 
     const bool simu_pure_dirichlet = true;
+    const bool simu_source_dirichlet = true;
+    const bool simu_sinBump_dirichlet = true;
 
     const bool verbose = flag_is_used( "-v", arguments )
         || flag_is_used( "--verbose", arguments );
 
-    if( simu_pure_dirichlet ) {
+    if( simu_pure_dirichlet ) 
+    {
         Simu::pure_dirichlet_pb("data/square_fine.mesh", verbose);
+    }
+    
+    if (simu_source_dirichlet ) 
+    {
+    	Simu::source_dirichlet_pb("data/square_fine.mesh", verbose);
+    }
+    
+    if (simu_sinBump_dirichlet)
+    {
+    	Simu::sinBump_dirichlet_pb("data/square_fine.mesh", verbose);
     }
 }
 

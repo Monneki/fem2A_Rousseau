@@ -396,7 +396,7 @@ namespace FEM2A {
         std::vector< double >& Fe )
     {
         std::cout << "compute elementary vector (neumann condition)" << '\n';
-        // TODO
+        
     }
 
     void local_to_global_vector(
@@ -406,8 +406,26 @@ namespace FEM2A {
         std::vector< double >& Fe,
         std::vector< double >& F )
     {
-        std::cout << "Fe -> F" << '\n';
-        // TODO
+        //std::cout << "Fe->F" << '\n';
+        
+        if (border)
+        {
+        	for (int indiceX = 0; indiceX <2 ; indiceX ++)
+        	{
+        		double indiceEdge = M.get_edge_vertex_index(i, indiceX);
+        		F[indiceEdge] = Fe[indiceX];
+        	}
+        }
+        
+        if (not border)
+        {
+        	for (int indiceX = 0; indiceX < 3; indiceX++)
+        	{
+        		double indiceTriangle = M.get_triangle_vertex_index(i, indiceX);
+        		F[indiceTriangle] = Fe[indiceX];
+        		
+        	}
+    	}
     }
 
     void apply_dirichlet_boundary_conditions(

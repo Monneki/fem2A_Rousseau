@@ -74,12 +74,132 @@ namespace FEM2A {
 		apply_dirichlet_boundary_conditions(mesh, attribute_is_dirichlet, values, K, F);
 		std::vector<double> X(mesh.nb_vertices(), 0);
 		std:solve(K, F, X);
-		std::string export_name = "data/square_fine";
+		std::string export_name = "data/square_fine_pureD";
 		mesh.save(export_name+".mesh");
 		save_solution(X, export_name+".bb");
 
         }
+        
+        void source_dirichlet_pb( const std::string& mesh_filename, bool verbose )
+        	{
+            	//std::cout << "Solving a pure Dirichlet problem" << std::endl;
+            	if ( verbose ) 
+            		{
+                	std::cout << " Simulation de la solution d'un pb de Dirichlet pure sur le maillage square_fine. \n" << "" << "\n";
+            		}
+            	Mesh mesh;
+            	mesh.load(mesh_filename);
+        	ShapeFunctions reference_functions(2,1);
+        	Quadrature quadrature;
+        	quadrature = quadrature.get_quadrature(0,false);
+        	
+        	//initialisation matrice K
+        	int tailleK = mesh.nb_vertices();
+		SparseMatrix K(tailleK);		
+		for (int triangle = 0; triangle<mesh.nb_triangles(); triangle ++)
+		{
+			ElementMapping elt_mapping(mesh, false, triangle);
+			//Initialisation Ke
+			DenseMatrix Ke;
+        		Ke.set_size(reference_functions.nb_functions(),reference_functions.nb_functions());
+			assemble_elementary_matrix(elt_mapping, reference_functions, quadrature, unit_fct, Ke);
+			local_to_global_matrix(mesh, triangle, Ke, K);
+		}
+		
+		//initialisation vecteur F
+		std::vector<double> F(mesh.nb_vertices(), 0);
+		for (int edge = 0; edge < mesh.nb_triangles(); edge ++)
+		{
+			ElementMapping elt_mapping(mesh, false, edge);
+			//Initialisation Fe
+			std::vector<double> Fe(reference_functions.nb_functions(), 0);
+			assemble_elementary_vector(elt_mapping, reference_functions, quadrature, unit_fct, Fe);
+			local_to_global_vector(mesh, false, edge, Fe, F);
+		}
+		
+		//initialisation condition Dirichlet
+		std::vector<bool> attribute_is_dirichlet;
+		attribute_is_dirichlet.push_back(true);
+		mesh.set_attribute(unit_fct, 0, true);
+		
+		//initialisation values
+		std::vector<double> values;
+		for (int i = 0; i < mesh.nb_vertices(); i++)
+		{
+			values.push_back(zero_fct(mesh.get_vertex(i)));
+		}
+	
+		apply_dirichlet_boundary_conditions(mesh, attribute_is_dirichlet, values, K, F);
+		std::vector<double> X(mesh.nb_vertices(), 0);
+		std:solve(K, F, X);
+		std::string export_name = "data/square_fine_sourceD";
+		mesh.save(export_name+".mesh");
+		save_solution(X, export_name+".bb");
 
+        	}
+
+        double sinBump( vertex v )
+        {
+            return 2*pow(3.1415,2) * sin(3.1415*v.x) * sin(3.1415*v.y);
+        }
+
+	void sinBump_dirichlet_pb( const std::string& mesh_filename, bool verbose )
+        	{
+            	//std::cout << "Solving a pure Dirichlet problem" << std::endl;
+            	if ( verbose ) 
+            		{
+                	std::cout << " Simulation de la solution d'un pb de Dirichlet pure sur le maillage square_fine. \n" << "" << "\n";
+            		}
+            	Mesh mesh;
+            	mesh.load(mesh_filename);
+        	ShapeFunctions reference_functions(2,1);
+        	Quadrature quadrature;
+        	quadrature = quadrature.get_quadrature(0,false);
+        	
+        	//initialisation matrice K
+        	int tailleK = mesh.nb_vertices();
+		SparseMatrix K(tailleK);		
+		for (int triangle = 0; triangle<mesh.nb_triangles(); triangle ++)
+		{
+			ElementMapping elt_mapping(mesh, false, triangle);
+			//Initialisation Ke
+			DenseMatrix Ke;
+        		Ke.set_size(reference_functions.nb_functions(),reference_functions.nb_functions());
+			assemble_elementary_matrix(elt_mapping, reference_functions, quadrature, unit_fct, Ke);
+			local_to_global_matrix(mesh, triangle, Ke, K);
+		}
+		
+		//initialisation vecteur F
+		std::vector<double> F(mesh.nb_vertices(), 0);
+		for (int edge = 0; edge < mesh.nb_triangles(); edge ++)
+		{
+			ElementMapping elt_mapping(mesh, false, edge);
+			//Initialisation Fe
+			std::vector<double> Fe(reference_functions.nb_functions(), 0);
+			assemble_elementary_vector(elt_mapping, reference_functions, quadrature, sinBump, Fe);
+			local_to_global_vector(mesh, false, edge, Fe, F);
+		}
+		
+		//initialisation condition Dirichlet
+		std::vector<bool> attribute_is_dirichlet;
+		attribute_is_dirichlet.push_back(true);
+		mesh.set_attribute(unit_fct, 0, true);
+		
+		//initialisation values
+		std::vector<double> values;
+		for (int i = 0; i < mesh.nb_vertices(); i++)
+		{
+			values.push_back(zero_fct(mesh.get_vertex(i)));
+		}
+	
+		apply_dirichlet_boundary_conditions(mesh, attribute_is_dirichlet, values, K, F);
+		std::vector<double> X(mesh.nb_vertices(), 0);
+		std:solve(K, F, X);
+		std::string export_name = "data/square_fine_sinBump";
+		mesh.save(export_name+".mesh");
+		save_solution(X, export_name+".bb");
+
+        }
     }
 
 }
