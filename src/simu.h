@@ -34,10 +34,10 @@ namespace FEM2A {
 
         void pure_dirichlet_pb( const std::string& mesh_filename, bool verbose )
         	{
-            	std::cout << "Solving a pure Dirichlet problem" << std::endl;
+            	//std::cout << "Solving a pure Dirichlet problem" << std::endl;
             	if ( verbose ) 
             		{
-                	std::cout << " with lots of printed details..." << std::endl;
+                	std::cout << " Simulation de la solution d'un pb de Dirichlet pure sur le maillage square_fine. \n" << "Pour modifier le maillaige en question il faut modifier dans main.cpp le fichier prit en entier, et dans simu.h le nom du fichier en sortie.\n " << "!! il faut que le nom du fichier en sortie .bb soit le même que celui prit en entrée " << "\n";
             		}
             	Mesh mesh;
             	mesh.load(mesh_filename);
@@ -74,7 +74,7 @@ namespace FEM2A {
 		apply_dirichlet_boundary_conditions(mesh, attribute_is_dirichlet, values, K, F);
 		std::vector<double> X(mesh.nb_vertices(), 0);
 		std:solve(K, F, X);
-		std::string export_name = "data/square";
+		std::string export_name = "data/square_fine";
 		mesh.save(export_name+".mesh");
 		save_solution(X, export_name+".bb");
 

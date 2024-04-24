@@ -33,7 +33,7 @@ void run_tests()
     const bool t_io = false;
     
     const bool t_quadrature=false;
-    const bool t_map = false;
+    const bool t_map = true;
     const bool t_transform = false;
     const bool t_Mjacobienne = false;
     const bool t_DetJacobienne = false;
@@ -42,15 +42,18 @@ void run_tests()
     const bool t_nb_functions = false;
     const bool t_evaluate = false;
     const bool t_G_evaluate = false;
+    
     const bool t_AEM = false;
-    const bool t_LtGMatrix = true;
+    const bool t_LtGMatrix = false;
+    const bool t_aDBc = false;
+
 
     if( t_opennl ) test_opennl();
     if( t_lmesh ) Tests::test_load_mesh();
     if( t_io ) Tests::test_load_save_mesh();
     
     if (t_quadrature)  Tests::test_quadrature(0, false);
-    if (t_map) Tests::test_map("data/square.mesh", false, 4);
+    if (t_map) Tests::test_map("data/square_fine.mesh", false, 4);
     if (t_transform) Tests::test_transform();
     if (t_Mjacobienne) Tests::test_Jacobian_Matrix();
     if (t_DetJacobienne) Tests::test_Jacobian_Det();
@@ -63,6 +66,8 @@ void run_tests()
     
     if (t_AEM) Tests::test_AEM();
     if (t_LtGMatrix) Tests::test_LtGMatrix();
+    if (t_aDBc) Tests::test_aDBc();
+
 }
 
 void run_simu()
@@ -74,7 +79,7 @@ void run_simu()
         || flag_is_used( "--verbose", arguments );
 
     if( simu_pure_dirichlet ) {
-        Simu::pure_dirichlet_pb("data/square.mesh", verbose);
+        Simu::pure_dirichlet_pb("data/square_fine.mesh", verbose);
     }
 }
 

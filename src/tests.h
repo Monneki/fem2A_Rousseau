@@ -169,7 +169,7 @@ namespace FEM2A {
         bool test_AEM()
         {
         	Mesh mesh;
-             	mesh.load("data/square.mesh");
+             	mesh.load("data/square_fine.mesh");
             	ElementMapping elt_mapping(mesh, false, 4);
         	
         	ShapeFunctions reference_functions (2,1);
@@ -190,7 +190,7 @@ namespace FEM2A {
         bool test_LtGMatrix()
         {// Necessaire pour obtenir Ke
         	Mesh mesh; // maillage
-        	mesh.load("data/square.mesh");
+        	mesh.load("data/square_fine.mesh");
         	ElementMapping elt_mapping(mesh, false, 4);
         	ShapeFunctions reference_functions (2,1);
         	Quadrature quadrature;
@@ -214,7 +214,7 @@ namespace FEM2A {
 	bool test_aDBc()
 	{//Préparation pour appliquer les conditions de D
 		Mesh mesh; // maillage
-        	mesh.load("data/square.mesh");
+        	mesh.load("data/square_fine.mesh");
         	ElementMapping elt_mapping(mesh, false, 4);
         	ShapeFunctions reference_functions (2,1);
         	Quadrature quadrature;
